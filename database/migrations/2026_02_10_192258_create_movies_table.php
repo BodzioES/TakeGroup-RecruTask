@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('movies', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('external_id')->unique();
+            $table->string('original_language');
+            $table->string('original_title');
+            $table->float('popularity')->nullable();
+            $table->string('poster_path')->nullable();
+            $table->date('release_date')->nullable();
+            $table->boolean('video')->default(false);
+            $table->float('vote_average')->nullable();
+            $table->integer('vote_count')->nullable();
             $table->timestamps();
         });
     }

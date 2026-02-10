@@ -5,13 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Movie extends Model
+class Serie extends Model
 {
+
+    protected $guarded = [];
     public function genres(){
-        return $this->belongsToMany(Genre::class,'genre_movie');
+        return $this->belongsToMany(Genre::class,'genre_serie');
     }
 
     public function languages(): HasMany{
-        return $this->hasMany(MovieLanguages::class);
+        return $this->hasMany(SerieLanguages::class);
     }
 }
