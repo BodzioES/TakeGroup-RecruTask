@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MovieLanguages extends Model
 {
+
+    protected $guarded = [];
     public function movie(): BelongsTo
     {
         return $this->belongsTo(Movie::class);
