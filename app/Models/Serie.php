@@ -10,7 +10,7 @@ class Serie extends Model
 
     protected $guarded = [];
     public function genres(){
-        return $this->belongsToMany(Genre::class,'genre_serie');
+        return $this->belongsToMany(Genre::class,'genre_series');
     }
 
     public function languages(): HasMany{

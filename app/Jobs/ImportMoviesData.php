@@ -13,7 +13,7 @@ use App\Models\Movie;
 use App\Models\MovieLanguages;
 use App\Models\Genre;
 
-class ImportTmdbData implements ShouldQueue
+class ImportMoviesData implements ShouldQueue
 {
     use Queueable, InteractsWithQueue, SerializesModels, Dispatchable;
 
@@ -22,7 +22,8 @@ class ImportTmdbData implements ShouldQueue
         //
     }
 
-
+    //  Retrieves the 50 most popular movies from the TMDB API, maps their genres to local
+    //  identifiers and automatically generates a translation database for three languages (PL, EN, DE)
     public function handle(): void
     {
         $apiKey = config('services.tmdb.api_key') ?? env('TMDB_API_KEY');
@@ -45,6 +46,7 @@ class ImportTmdbData implements ShouldQueue
 
             foreach ($movies as $movieData) {
 
+                //  If function save more or 50 movie records, it breaks the loop
                 if ($totalMoviesProcessed >= 50){
                     break 2;
                 }
@@ -61,8 +63,10 @@ class ImportTmdbData implements ShouldQueue
                     ]
                 );
 
+                //  Maps species IDs from the API to primary keys in my database
                 if (isset($movieData['genre_ids'])) {
                     $localGenreIds = Genre::whereIn('external_id', $movieData['genre_ids'])->pluck('id');
+                    //  Synchronizes many-to-many relationships (removes old, adds new relationships)
                     $movieModel->genres()->sync($localGenreIds);
                 }
 

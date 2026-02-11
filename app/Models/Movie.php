@@ -10,7 +10,7 @@ class Movie extends Model
 
     protected $guarded = [];
     public function genres(){
-        return $this->belongsToMany(Genre::class,'genre_movie');
+        return $this->belongsToMany(Genre::class, 'genre_movies')->withTimestamps();
     }
 
     public function languages(): HasMany{

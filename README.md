@@ -1,59 +1,46 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# API Movie & Series Manager
+A short recruitment project implementing a system for synchronizing and displaying movies and TV series from an external TMDB API. The system supports full multilingual support (PL, EN, DE) and dynamic view switching.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Environment and Technology
+* **Backend:** PHP 8.2 + Laravel 11
+* **Frontend:** Livewire 3
+* **Database:** MySQL 8.0
+* **Containerization:** Docker + Docker Compose
+* **Stylization:** Tailwind CSS
+* **Data:** The Movie Database (TMDB) API
 
-## About Laravel
+---
+### I recommend the Postman application to test endpoints, it makes testing much easier
+## Project launch
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+1. **Environment configuration:**
+    - Copy file `.env.example` to `.env`.
+    - In the file `.env` complete the key `TMDB_API_KEY="your_key_here"`.
+    - Make sure that `DB_HOST=db` and `DB_PASSWORD=` (I left it blank to make it easier to check)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+2. **Construction and launch of containers:**
+   ```bash
+   docker-compose build
+   docker-compose up -d
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+3. **Installation and migrations:**
+    ```bash
+    docker-compose exec app composer install
+    docker-compose exec app php artisan migrate
+   
+4. **Data import from API:**
+    ```bash
+    docker-compose exec app php artisan tmdb:import
 
-## Learning Laravel
+### After starting the containers, the frontend is available at:
+### http://localhost:8080
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+5. **API endpoints:**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    All endpoints accept the Accept-Language: pl|en|de header. If the header is missing, the default language returned is English (en).
 
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    | Method | Endpoint | Description |
+    | :--- | :--- | :--- |
+    | `GET` | `/api/movies` | Returns a paginated list of 50 movies with translations and genres. |
+    | `GET` | `/api/series` | Returns a paginated list of 10 series with translations and genres. |
+    | `GET` | `/api/genres` | Returns the full list of available genres in the selected language. |

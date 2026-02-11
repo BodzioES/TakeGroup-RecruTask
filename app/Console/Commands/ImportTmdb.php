@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\ImportGenres;
+use App\Jobs\ImportSeriesData;
 use Illuminate\Console\Command;
-use App\Jobs\ImportTmdbData;
+use App\Jobs\ImportMoviesData;
 
 class ImportTmdb extends Command
 {
@@ -26,9 +28,14 @@ class ImportTmdb extends Command
      */
     public function handle()
     {
-        $this->info('Importing data from TMDB');
+        $this->info('Importing genres first');
+        ImportGenres::dispatchSync();
 
-        ImportTmdbData::dispatch();
+        $this->info('Importing movies from TMDB');
+        ImportMoviesData::dispatchSync();
+
+        $this->info('Importing series from TMDB');
+        ImportSeriesData::dispatchSync();
 
         $this->info('The Job has been added to queue');
     }
