@@ -44,3 +44,8 @@ A short recruitment project implementing a system for synchronizing and displayi
     | `GET` | `/api/movies` | Returns a paginated list of 50 movies with translations and genres. |
     | `GET` | `/api/series` | Returns a paginated list of 10 series with translations and genres. |
     | `GET` | `/api/genres` | Returns the full list of available genres in the selected language. |
+
+6. **Testing:**
+    I verifies that the /api/movies endpoint is working correctly, returning a success code of 200 and the expected JSON structure with a list of movies.
+```bash
+    docker-compose exec app php artisan test
